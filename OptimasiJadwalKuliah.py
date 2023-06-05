@@ -1,1 +1,4 @@
-import pandas as pd
+x=10
+print(x)
+
+print("halo saya aku")
