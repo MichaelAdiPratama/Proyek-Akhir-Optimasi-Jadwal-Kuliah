@@ -21,3 +21,13 @@ def tambah_jadwal():
     jadwal_df = pd.DataFrame(jadwal_kuliah,columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
     jadwal_text.delete(1.0,END)
     jadwal_text.insert(END,jadwal_df.to_string(index=False))
+
+# fungsi hapus jadwal kuliah terakhir:
+def hapus_jadwal():
+    if jadwal_kuliah:
+        jadwal_kuliah.pop()
+        jadwal_df = pd.DataFrame(jadwal_kuliah,columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
+        jadwal_text.delete(1.0,END)
+        jadwal_text.insert(END, jadwal_df.to_string(index=False))
+    else:
+        messagebox.showinfo("Peringatan","Tidak ada jadwal kuliah yang dapat dihapus!")
