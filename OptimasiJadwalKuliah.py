@@ -18,7 +18,7 @@ def tambah_jadwal():
     ruangan = ruangan_entry.get()
     hari = hari_var.get()
     jadwal_kuliah.append([hari,mata_kuliah,nama_dosen,start_time, end_time, ruangan,bobot_sks])
-    data_jadwal = pd.DataFrame(jadwal_kuliah,columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
+    data_jadwal = pd.DataFrame(jadwal_kuliah,columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
     jadwal_text.delete(1.0,END)
     jadwal_text.insert(END,data_jadwal.to_string(index=False))
 
@@ -109,26 +109,26 @@ def inisialisasi_populasi(jumlah_individu):
 
 # Fungsi untuk menampilkan jadwal kuliah
 def tampilkan_jadwal(schedule):
-    data_jadwal = pd.DataFrame(schedule, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
+    data_jadwal = pd.DataFrame(schedule, columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
     return data_jadwal.to_string(index=False)
 
 # Fungsi untuk menampilkan jadwal kuliah berdasarkan nama hari
 def tampilkan_jadwal_per_hari(schedule):
     schedule_every_day = {}
-    for jadwal_item in schedule:
-        hari = jadwal_item[6]
-        if hari not in schedule_every_day:
-            schedule_every_day[hari] = []
-        schedule_every_day[hari].append(jadwal_item)
+    for schedule_item in schedule:
+        day = schedule_item[6]
+        if day not in schedule_every_day:
+            schedule_every_day[day] = []
+        schedule_every_day[day].append(schedule_item)
     return schedule_every_day
 
 # Fungsi untuk menampilkan jadwal kuliah ke dalam GUI
 def tampilkan_jadwal_gui(schedule):
     schedule_every_day = tampilkan_jadwal_per_hari(schedule)
     jadwal_text.delete(1.0, END)
-    for hari, jadwal_items in schedule_every_day.items():
-        data_jadwal = pd.DataFrame(jadwal_items, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
-        jadwal_text.insert(END, f"Hari: {hari}\n")
+    for day, schedule_items in schedule_every_day.items():
+        data_jadwal = pd.DataFrame(schedule_items, columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
+        jadwal_text.insert(END, f"Hari: {day}\n")
         jadwal_text.insert(END, data_jadwal.to_string(index=False))
         jadwal_text.insert(END, "\n\n")
 
@@ -210,7 +210,7 @@ hapus_button.pack(side=LEFT)
 jadwal_frame = Frame(root)
 jadwal_frame.pack(pady=10)
 
-jadwal_text = Text(jadwal_frame, height=15, width=70)
+jadwal_text = Text(jadwal_frame, height=15, width=90)
 jadwal_text.pack()
 
 generations_label = Label(root, text="Jumlah Generasi:")
