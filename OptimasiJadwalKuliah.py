@@ -130,3 +130,95 @@ def tampilkan_jadwal_gui(jadwal):
         jadwal_text.insert(END, f"Hari: {hari}\n")
         jadwal_text.insert(END, jadwal_df.to_string(index=False))
         jadwal_text.insert(END, "\n\n")
+
+
+# Membuat GUI
+root = Tk()
+root.title("Optimasi Jadwal Kuliah")
+root.geometry("600x500")
+
+input_frame = Frame(root)
+input_frame.pack(pady=10)
+
+# Mengatur warna latar belakang dan tampilan tombol
+root.configure(bg="#F0F0F0")
+tambah_button_color = "#008080"
+hapus_button_color = "#FF4500"
+generate_button_color = "#006400"
+
+# Mengatur warna latar belakang dan tampilan label dan kotak teks
+label_bg_color = "#F0F0F0"
+label_fg_color = "#000000"
+text_bg_color = "#FFFFFF"
+text_fg_color = "#000000"
+
+jam_mulai_label = Label(input_frame, text="Jam Mulai (HH:MM):")
+jam_mulai_label.grid(row=0, column=0)
+
+jam_mulai_entry = Entry(input_frame)
+jam_mulai_entry.grid(row=0, column=1)
+
+jam_selesai_label = Label(input_frame, text="Jam Selesai (HH:MM):")
+jam_selesai_label.grid(row=0, column=2)
+
+jam_selesai_entry = Entry(input_frame)
+jam_selesai_entry.grid(row=0, column=3)
+
+nama_dosen_label = Label(input_frame, text="Nama Dosen:")
+nama_dosen_label.grid(row=1, column=0)
+
+nama_dosen_entry = Entry(input_frame)
+nama_dosen_entry.grid(row=1, column=1)
+
+mata_kuliah_label = Label(input_frame, text="Mata Kuliah:")
+mata_kuliah_label.grid(row=1, column=2)
+
+mata_kuliah_entry = Entry(input_frame)
+mata_kuliah_entry.grid(row=1, column=3)
+
+sks_label = Label(input_frame, text="Jumlah SKS:")
+sks_label.grid(row=2, column=0)
+
+sks_entry = Entry(input_frame)
+sks_entry.grid(row=2, column=1)
+
+ruangan_label = Label(input_frame, text="Ruangan:")
+ruangan_label.grid(row=2, column=2)
+
+ruangan_entry = Entry(input_frame)
+ruangan_entry.grid(row=2, column=3)
+
+hari_label = Label(input_frame, text="Hari:")
+hari_label.grid(row=3, column=0)
+
+hari_var = StringVar(root)
+hari_var.set("Senin")  # Default hari: Senin
+
+hari_option_menu = OptionMenu(input_frame, hari_var, "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu")
+hari_option_menu.grid(row=3, column=1)
+
+button_frame = Frame(root)
+button_frame.pack(pady=5)
+
+tambah_button = Button(button_frame, text="Tambah Jadwal", command=tambah_jadwal,bg=tambah_button_color, fg=text_fg_color)
+tambah_button.pack(side=LEFT)
+
+hapus_button = Button(button_frame, text="Hapus Jadwal Terakhir", command=hapus_jadwal,bg=hapus_button_color, fg=text_fg_color)
+hapus_button.pack(side=LEFT)
+
+jadwal_frame = Frame(root)
+jadwal_frame.pack(pady=10)
+
+jadwal_text = Text(jadwal_frame, height=10, width=60)
+jadwal_text.pack()
+
+generations_label = Label(root, text="Jumlah Generasi:")
+generations_label.pack()
+
+generations_entry = Entry(root)
+generations_entry.pack()
+
+optimasi_button = Button(root, text="Optimasi Jadwal", command=optimasi_jadwal)
+optimasi_button.pack()
+
+root.mainloop()
