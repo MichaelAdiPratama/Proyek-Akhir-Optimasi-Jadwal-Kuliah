@@ -42,6 +42,16 @@ def seleksi_orang_tua(populasi):
         orang_tua.append(turnamen[0])
     return orang_tua
 
+
+# Rekombinasi orang tua menggunakan metode satu titik potong
+def rekombinasi(orang_tua):
+    titik_crossover = random.randint(1, len(jadwal_kuliah) - 1)
+    anak = []
+    anak.append(orang_tua[0][:titik_crossover] + orang_tua[1][titik_crossover:])
+    anak.append(orang_tua[1][:titik_crossover] + orang_tua[0][titik_crossover:])
+    return anak
+
+
 def mutasi(anak):
     for i in range(len(anak)):
         if random.random() < 0.1:
@@ -110,3 +120,4 @@ def tampilkan_jadwal_per_hari(jadwal):
             jadwal_per_hari[hari] = []
         jadwal_per_hari[hari].append(jadwal_item)
     return jadwal_per_hari
+
