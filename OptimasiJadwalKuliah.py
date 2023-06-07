@@ -36,7 +36,23 @@ def hapus_jadwal():
 
 
 
+# Algoritma genetika
+def genetic_algorithm(jumlah_generasi, trace=False):
+    populasi = inisialisasi_populasi(10)
+    for generasi in range(jumlah_generasi):
+        populasi_baru = []
+        for _ in range(len(populasi) // 2):
+            orang_tua = seleksi_orang_tua(populasi)
+            anak = rekombinasi(orang_tua)
+            anak_mutasi = mutasi(anak)
+            populasi_baru.extend(anak_mutasi)
+            if trace:
+                print(f"Generasi {generasi+1} - Crossover: {orang_tua[0]} & {orang_tua[1]}")
+                print(f"Generasi {generasi+1} - Mutasi: {anak_mutasi}")
+        populasi = populasi_baru
 
+    populasi.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
+    return populasi[0]
 
 
 # Fungsi untuk menjalankan optimasi jadwal dengan metode Genetic Algorithm
