@@ -209,7 +209,7 @@ hapus_button.pack(side=LEFT)
 jadwal_frame = Frame(root)
 jadwal_frame.pack(pady=10)
 
-jadwal_text = Text(jadwal_frame, height=20, width=70)
+jadwal_text = Text(jadwal_frame, height=15, width=70)
 jadwal_text.pack()
 
 generations_label = Label(root, text="Jumlah Generasi:")
