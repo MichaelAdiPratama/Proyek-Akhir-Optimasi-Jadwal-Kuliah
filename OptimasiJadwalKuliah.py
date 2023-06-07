@@ -87,7 +87,7 @@ def optimasi_jadwal():
         tampilkan_jadwal_gui(jadwal_terbaik)
     else:
         messagebox.showinfo("Peringatan", "Minimal harus ada 2 jadwal kuliah untuk melakukan optimasi.")
-        
+
 # Evaluasi fitness
 def evaluasi_fitness(individu):
     fitness = 0
@@ -108,25 +108,25 @@ def inisialisasi_populasi(jumlah_individu):
     return population
 
 # Fungsi untuk menampilkan jadwal kuliah
-def tampilkan_jadwal(jadwal):
-    data_jadwal = pd.DataFrame(jadwal, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
+def tampilkan_jadwal(schedule):
+    data_jadwal = pd.DataFrame(schedule, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
     return data_jadwal.to_string(index=False)
 
 # Fungsi untuk menampilkan jadwal kuliah berdasarkan nama hari
-def tampilkan_jadwal_per_hari(jadwal):
-    jadwal_per_hari = {}
-    for jadwal_item in jadwal:
+def tampilkan_jadwal_per_hari(schedule):
+    schedule_every_day = {}
+    for jadwal_item in schedule:
         hari = jadwal_item[6]
-        if hari not in jadwal_per_hari:
-            jadwal_per_hari[hari] = []
-        jadwal_per_hari[hari].append(jadwal_item)
-    return jadwal_per_hari
+        if hari not in schedule_every_day:
+            schedule_every_day[hari] = []
+        schedule_every_day[hari].append(jadwal_item)
+    return schedule_every_day
 
 # Fungsi untuk menampilkan jadwal kuliah ke dalam GUI
-def tampilkan_jadwal_gui(jadwal):
-    jadwal_per_hari = tampilkan_jadwal_per_hari(jadwal)
+def tampilkan_jadwal_gui(schedule):
+    schedule_every_day = tampilkan_jadwal_per_hari(schedule)
     jadwal_text.delete(1.0, END)
-    for hari, jadwal_items in jadwal_per_hari.items():
+    for hari, jadwal_items in schedule_every_day.items():
         data_jadwal = pd.DataFrame(jadwal_items, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
         jadwal_text.insert(END, f"Hari: {hari}\n")
         jadwal_text.insert(END, data_jadwal.to_string(index=False))
