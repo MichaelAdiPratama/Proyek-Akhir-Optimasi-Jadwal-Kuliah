@@ -121,3 +121,12 @@ def tampilkan_jadwal_per_hari(jadwal):
         jadwal_per_hari[hari].append(jadwal_item)
     return jadwal_per_hari
 
+# Fungsi untuk menampilkan jadwal kuliah ke dalam GUI
+def tampilkan_jadwal_gui(jadwal):
+    jadwal_per_hari = tampilkan_jadwal_per_hari(jadwal)
+    jadwal_text.delete(1.0, END)
+    for hari, jadwal_items in jadwal_per_hari.items():
+        jadwal_df = pd.DataFrame(jadwal_items, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
+        jadwal_text.insert(END, f"Hari: {hari}\n")
+        jadwal_text.insert(END, jadwal_df.to_string(index=False))
+        jadwal_text.insert(END, "\n\n")
