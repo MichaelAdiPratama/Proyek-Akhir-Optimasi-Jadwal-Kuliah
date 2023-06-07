@@ -77,7 +77,36 @@ def optimasi_jadwal():
         tampilkan_jadwal_gui(jadwal_terbaik)
     else:
         messagebox.showinfo("Peringatan", "Minimal harus ada 2 jadwal kuliah untuk melakukan optimasi.")
+# Evaluasi fitness
+def evaluasi_fitness(individu):
+    fitness = 0
+    for i in range(len(individu)):
+        for j in range(i + 1, len(individu)):
+            if (individu[i][0] <= individu[j][0] < individu[i][1] or \
+                individu[j][0] <= individu[i][0] < individu[j][1]) and \
+                    individu[i][6] == individu[j][6]:
+                fitness -= 1
+    return fitness
 
+# Inisialisasi populasi awal
+def inisialisasi_populasi(jumlah_individu):
+    populasi = []
+    for _ in range(jumlah_individu):
+        individu = random.sample(jadwal_kuliah, len(jadwal_kuliah))
+        populasi.append(individu)
+    return populasi
 
+# Fungsi untuk menampilkan jadwal kuliah
+def tampilkan_jadwal(jadwal):
+    jadwal_df = pd.DataFrame(jadwal, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
+    return jadwal_df.to_string(index=False)
 
-wkwkkwkw
+# Fungsi untuk menampilkan jadwal kuliah berdasarkan nama hari
+def tampilkan_jadwal_per_hari(jadwal):
+    jadwal_per_hari = {}
+    for jadwal_item in jadwal:
+        hari = jadwal_item[6]
+        if hari not in jadwal_per_hari:
+            jadwal_per_hari[hari] = []
+        jadwal_per_hari[hari].append(jadwal_item)
+    return jadwal_per_hari
