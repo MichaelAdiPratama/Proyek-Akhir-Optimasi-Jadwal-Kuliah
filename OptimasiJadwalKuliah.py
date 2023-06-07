@@ -33,60 +33,61 @@ def hapus_jadwal():
         messagebox.showinfo("Warning!","Tidak ada jadwal kuliah yang dapat dihapus!")
 
 
-def seleksi_orang_tua(populasi):
+def parent_selection(population):
     tournament_size = 3
-    orang_tua = []
+    parent = []
     for _ in range(2):
-        turnamen = random.sample(populasi, tournament_size)
+        turnamen = random.sample(population, tournament_size)
         turnamen.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
-        orang_tua.append(turnamen[0])
-    return orang_tua
+        parent.append(turnamen[0])
+    return parent
 
 
 # Rekombinasi orang tua menggunakan metode satu titik potong
-def rekombinasi(orang_tua):
-    titik_crossover = random.randint(1, len(jadwal_kuliah) - 1)
-    anak = []
-    anak.append(orang_tua[0][:titik_crossover] + orang_tua[1][titik_crossover:])
-    anak.append(orang_tua[1][:titik_crossover] + orang_tua[0][titik_crossover:])
-    return anak
+def rekombinasi(parent):
+    crossover_point = random.randint(1, len(jadwal_kuliah) - 1)
+    child = []
+    child.append(parent[0][:crossover_point] + parent[1][crossover_point:])
+    child.append(parent[1][:crossover_point] + parent[0][crossover_point:])
+    return child
 
 
-def mutasi(anak):
-    for i in range(len(anak)):
+def mutasi(child):
+    for i in range(len(child)):
         if random.random() < 0.1:
             gen1 = random.randint(0, len(jadwal_kuliah) - 1)
             gen2 = random.randint(0, len(jadwal_kuliah) - 1)
-            anak[i][gen1], anak[i][gen2] = anak[i][gen2], anak[i][gen1]
-    return anak
+            child[i][gen1], child[i][gen2] = child[i][gen2], child[i][gen1]
+    return child
 
 # Algoritma genetika
-def genetic_algorithm(jumlah_generasi, trace=False):
-    populasi = inisialisasi_populasi(10)
-    for generasi in range(jumlah_generasi):
-        populasi_baru = []
-        for _ in range(len(populasi) // 2):
-            orang_tua = seleksi_orang_tua(populasi)
-            anak = rekombinasi(orang_tua)
-            anak_mutasi = mutasi(anak)
-            populasi_baru.extend(anak_mutasi)
+def genetic_algorithm(sum_generation, trace=False):
+    population = inisialisasi_populasi(10)
+    for generasi in range(sum_generation):
+        new_population = []
+        for _ in range(len(population) // 2):
+            parent = parent_selection(population)
+            child = rekombinasi(parent)
+            child_mutate = mutasi(child)
+            new_population.extend(child_mutate)
             if trace:
-                print(f"Generasi {generasi+1} - Crossover: {orang_tua[0]} & {orang_tua[1]}")
-                print(f"Generasi {generasi+1} - Mutasi: {anak_mutasi}")
-        populasi = populasi_baru
+                print(f"Generasi {generasi+1} - Crossover: {parent[0]} & {parent[1]}")
+                print(f"Generasi {generasi+1} - Mutasi: {child_mutate}")
+        population = new_population
 
-    populasi.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
-    return populasi[0]
+    population.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
+    return population[0]
 
 
 # Fungsi untuk menjalankan optimasi jadwal dengan metode Genetic Algorithm
 def optimasi_jadwal():
-    jumlah_generasi = int(generations_entry.get())
+    sum_generation = int(generations_entry.get())
     if len(jadwal_kuliah) >= 2:
-        jadwal_terbaik = genetic_algorithm(jumlah_generasi, trace=True)
+        jadwal_terbaik = genetic_algorithm(sum_generation, trace=True)
         tampilkan_jadwal_gui(jadwal_terbaik)
     else:
         messagebox.showinfo("Peringatan", "Minimal harus ada 2 jadwal kuliah untuk melakukan optimasi.")
+        
 # Evaluasi fitness
 def evaluasi_fitness(individu):
     fitness = 0
@@ -100,11 +101,11 @@ def evaluasi_fitness(individu):
 
 # Inisialisasi populasi awal
 def inisialisasi_populasi(jumlah_individu):
-    populasi = []
+    population = []
     for _ in range(jumlah_individu):
         individu = random.sample(jadwal_kuliah, len(jadwal_kuliah))
-        populasi.append(individu)
-    return populasi
+        population.append(individu)
+    return population
 
 # Fungsi untuk menampilkan jadwal kuliah
 def tampilkan_jadwal(jadwal):
