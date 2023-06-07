@@ -10,34 +10,34 @@ jadwal_kuliah = []
 
 # fungsi add jadwal kuliah untuk menambahkan jadwal kuliah:
 def tambah_jadwal():
-    jam_mulai = int(jam_mulai_entry.get())
-    jam_selesai = int(jam_selesai_entry.get())
+    start_time = int(start_time_entry.get())
+    end_time = int(end_time_entry.get())
     nama_dosen = nama_dosen_entry.get()
     mata_kuliah = mata_kuliah_entry.get()
-    sks = int (sks_entry.get())
+    bobot_sks = int (bobot_sks_entry.get())
     ruangan = ruangan_entry.get()
     hari = hari_var.get()
-    jadwal_kuliah.append([hari,mata_kuliah,nama_dosen,jam_mulai, jam_selesai, ruangan,sks])
-    jadwal_df = pd.DataFrame(jadwal_kuliah,columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
+    jadwal_kuliah.append([hari,mata_kuliah,nama_dosen,start_time, end_time, ruangan,bobot_sks])
+    data_jadwal = pd.DataFrame(jadwal_kuliah,columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
     jadwal_text.delete(1.0,END)
-    jadwal_text.insert(END,jadwal_df.to_string(index=False))
+    jadwal_text.insert(END,data_jadwal.to_string(index=False))
 
 # fungsi hapus jadwal kuliah terakhir:
 def hapus_jadwal():
     if jadwal_kuliah:
         jadwal_kuliah.pop()
-        jadwal_df = pd.DataFrame(jadwal_kuliah,columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
+        data_jadwal = pd.DataFrame(jadwal_kuliah,columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
         jadwal_text.delete(1.0,END)
-        jadwal_text.insert(END, jadwal_df.to_string(index=False))
+        jadwal_text.insert(END, data_jadwal.to_string(index=False))
     else:
-        messagebox.showinfo("Peringatan","Tidak ada jadwal kuliah yang dapat dihapus!")
+        messagebox.showinfo("Warning!","Tidak ada jadwal kuliah yang dapat dihapus!")
 
 
 def seleksi_orang_tua(populasi):
-    ukuran_turnamen = 3
+    tournament_size = 3
     orang_tua = []
     for _ in range(2):
-        turnamen = random.sample(populasi, ukuran_turnamen)
+        turnamen = random.sample(populasi, tournament_size)
         turnamen.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
         orang_tua.append(turnamen[0])
     return orang_tua
@@ -108,8 +108,8 @@ def inisialisasi_populasi(jumlah_individu):
 
 # Fungsi untuk menampilkan jadwal kuliah
 def tampilkan_jadwal(jadwal):
-    jadwal_df = pd.DataFrame(jadwal, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
-    return jadwal_df.to_string(index=False)
+    data_jadwal = pd.DataFrame(jadwal, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
+    return data_jadwal.to_string(index=False)
 
 # Fungsi untuk menampilkan jadwal kuliah berdasarkan nama hari
 def tampilkan_jadwal_per_hari(jadwal):
@@ -126,9 +126,9 @@ def tampilkan_jadwal_gui(jadwal):
     jadwal_per_hari = tampilkan_jadwal_per_hari(jadwal)
     jadwal_text.delete(1.0, END)
     for hari, jadwal_items in jadwal_per_hari.items():
-        jadwal_df = pd.DataFrame(jadwal_items, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
+        data_jadwal = pd.DataFrame(jadwal_items, columns=["Jam Mulai", "Jam Selesai", "Nama Dosen", "Mata Kuliah", "SKS", "Ruangan", "Hari"])
         jadwal_text.insert(END, f"Hari: {hari}\n")
-        jadwal_text.insert(END, jadwal_df.to_string(index=False))
+        jadwal_text.insert(END, data_jadwal.to_string(index=False))
         jadwal_text.insert(END, "\n\n")
 
 
@@ -152,17 +152,17 @@ label_fg_color = "#000000"
 text_bg_color = "#FFFFFF"
 text_fg_color = "#000000"
 
-jam_mulai_label = Label(input_frame, text="Jam Mulai (HH:MM):")
-jam_mulai_label.grid(row=0, column=0)
+start_time_label = Label(input_frame, text="Jam Mulai (HH:MM):")
+start_time_label.grid(row=0, column=0)
 
-jam_mulai_entry = Entry(input_frame)
-jam_mulai_entry.grid(row=0, column=1)
+start_time_entry = Entry(input_frame)
+start_time_entry.grid(row=0, column=1)
 
-jam_selesai_label = Label(input_frame, text="Jam Selesai (HH:MM):")
-jam_selesai_label.grid(row=0, column=2)
+end_time_label = Label(input_frame, text="Jam Selesai (HH:MM):")
+end_time_label.grid(row=0, column=2)
 
-jam_selesai_entry = Entry(input_frame)
-jam_selesai_entry.grid(row=0, column=3)
+end_time_entry = Entry(input_frame)
+end_time_entry.grid(row=0, column=3)
 
 nama_dosen_label = Label(input_frame, text="Nama Dosen:")
 nama_dosen_label.grid(row=1, column=0)
@@ -176,11 +176,11 @@ mata_kuliah_label.grid(row=1, column=2)
 mata_kuliah_entry = Entry(input_frame)
 mata_kuliah_entry.grid(row=1, column=3)
 
-sks_label = Label(input_frame, text="Jumlah SKS:")
-sks_label.grid(row=2, column=0)
+bobot_sks_label = Label(input_frame, text="Jumlah SKS:")
+bobot_sks_label.grid(row=2, column=0)
 
-sks_entry = Entry(input_frame)
-sks_entry.grid(row=2, column=1)
+bobot_sks_entry = Entry(input_frame)
+bobot_sks_entry.grid(row=2, column=1)
 
 ruangan_label = Label(input_frame, text="Ruangan:")
 ruangan_label.grid(row=2, column=2)
