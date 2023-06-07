@@ -77,3 +77,7 @@ def optimasi_jadwal():
         tampilkan_jadwal_gui(jadwal_terbaik)
     else:
         messagebox.showinfo("Peringatan", "Minimal harus ada 2 jadwal kuliah untuk melakukan optimasi.")
+
+
+
+wkwkkwkw
