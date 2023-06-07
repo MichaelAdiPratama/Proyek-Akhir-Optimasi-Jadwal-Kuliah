@@ -33,8 +33,22 @@ def hapus_jadwal():
         messagebox.showinfo("Peringatan","Tidak ada jadwal kuliah yang dapat dihapus!")
 
 
+def seleksi_orang_tua(populasi):
+    ukuran_turnamen = 3
+    orang_tua = []
+    for _ in range(2):
+        turnamen = random.sample(populasi, ukuran_turnamen)
+        turnamen.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
+        orang_tua.append(turnamen[0])
+    return orang_tua
 
-
+def mutasi(anak):
+    for i in range(len(anak)):
+        if random.random() < 0.1:
+            gen1 = random.randint(0, len(jadwal_kuliah) - 1)
+            gen2 = random.randint(0, len(jadwal_kuliah) - 1)
+            anak[i][gen1], anak[i][gen2] = anak[i][gen2], anak[i][gen1]
+    return anak
 
 # Algoritma genetika
 def genetic_algorithm(jumlah_generasi, trace=False):
