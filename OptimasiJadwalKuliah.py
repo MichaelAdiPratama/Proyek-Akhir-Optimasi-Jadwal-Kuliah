@@ -31,3 +31,19 @@ def hapus_jadwal():
         jadwal_text.insert(END, jadwal_df.to_string(index=False))
     else:
         messagebox.showinfo("Peringatan","Tidak ada jadwal kuliah yang dapat dihapus!")
+
+
+
+
+
+
+
+
+# Fungsi untuk menjalankan optimasi jadwal dengan metode Genetic Algorithm
+def optimasi_jadwal():
+    jumlah_generasi = int(generations_entry.get())
+    if len(jadwal_kuliah) >= 2:
+        jadwal_terbaik = genetic_algorithm(jumlah_generasi, trace=True)
+        tampilkan_jadwal_gui(jadwal_terbaik)
+    else:
+        messagebox.showinfo("Peringatan", "Minimal harus ada 2 jadwal kuliah untuk melakukan optimasi.")
