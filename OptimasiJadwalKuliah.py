@@ -71,8 +71,10 @@ def genetic_algorithm(sum_generation, trace=False):
             child_mutate = mutasi(child)
             new_population.extend(child_mutate)
             if trace:
-                print(f"\nGenerasi {generasi+1} - Crossover:  \n\nParent (0)\n\n {parent[0]} & \n\n Parent(1)\n\n {parent[1]} \n")
+                print(f"\nGenerasi {generasi} - Crossover:  \n\nParent (0)\n\n {parent[0]} & \n\n Parent(1)\n\n {parent[1]} \n")
+                parent += 1
                 print(f"\nGenerasi {generasi+1} - Mutasi:  Child mutate\n\n {child_mutate}\n")
+                
         population = new_population
 
     population.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
@@ -85,7 +87,7 @@ def optimasi_jadwal():
         messagebox.showinfo("Warning", "Minimal terdapat 2 jadwal kuliah untuk optimasi Jadwal!!!")
 
     else:
-        jadwal_terbaik = genetic_algorithm(sum_generation, trace=True)
+        jadwal_terbaik = genetic_algorithm(sum_generation, trace=False)
         tampilkan_jadwal_gui(jadwal_terbaik)
 
 
@@ -93,9 +95,8 @@ def evaluasi_fitness(kromosom):
     fitness_point = 0
     for i in range(len(kromosom)):
         for j in range(i + 1, len(kromosom)):
-            if (kromosom[i][0] <= kromosom[j][0] < kromosom[i][1] or \
-                kromosom[j][0] <= kromosom[i][0] < kromosom[j][1]) and \
-                    kromosom[i][6] == kromosom[j][6]:
+            if (kromosom[i][0] <= kromosom[j][0] < kromosom[i][1] or 
+                kromosom[j][0] <= kromosom[i][0] < kromosom[j][1]) and kromosom[i][6] == kromosom[j][6]:
                 fitness_point -= 1
     return fitness_point
 
@@ -109,17 +110,17 @@ def inisialisasi_populasi(jumlah_kromosom):
 
 
 def tampilkan_jadwal(schedule):
-    data_jadwal = pd.DataFrame(schedule, columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
+    data_jadwal = pd.DataFrame(schedule, columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS\n"])
     return data_jadwal.to_string(index=False)
 
 
 def tampilkan_jadwal_per_hari(schedule):
     schedule_every_day = {}
-    for schedule_item in schedule:
+    for i, schedule_item in enumerate(schedule):
         day = schedule_item[6]
         if day not in schedule_every_day:
             schedule_every_day[day] = []
-        schedule_every_day[day].append(schedule_item)
+        schedule_every_day[day].append((i+1, schedule_item))  # Menambahkan nomor kromosom sebagai informasi asal
     return schedule_every_day
 
 
@@ -127,10 +128,13 @@ def tampilkan_jadwal_gui(schedule):
     schedule_every_day = tampilkan_jadwal_per_hari(schedule)
     jadwal_text.delete(1.0, END)
     for day, schedule_items in schedule_every_day.items():
-        data_jadwal = pd.DataFrame(schedule_items, columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
         jadwal_text.insert(END, f"Hari: {day}\n")
-        jadwal_text.insert(END, data_jadwal.to_string(index=False))
-        jadwal_text.insert(END, "\n\n")
+        for kromosom, schedule_item in schedule_items:
+            data_jadwal = pd.DataFrame([schedule_item], columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS\n"])
+            jadwal_text.insert(END, f"Kromosom: {kromosom}\n")
+            jadwal_text.insert(END, data_jadwal.to_string(index=False))
+            jadwal_text.insert(END, "\n")
+        jadwal_text.insert(END, "\n")
 
 
 
