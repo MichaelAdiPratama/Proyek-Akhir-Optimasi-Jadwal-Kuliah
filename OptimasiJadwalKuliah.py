@@ -3,7 +3,7 @@ import random
 import pandas as pd
 from tkinter import *
 from tkinter import messagebox
-import datetime as dt
+
 
 
 jadwal_kuliah = []
@@ -24,13 +24,13 @@ def tambah_jadwal():
 
 
 def hapus_jadwal():
-    if jadwal_kuliah:
+    if not jadwal_kuliah:
+        messagebox.showinfo("Warning!","Tidak ada jadwal kuliah yang dapat dihapus!")
+    else:
         jadwal_kuliah.pop()
         data_jadwal = pd.DataFrame(jadwal_kuliah,columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
         jadwal_text.delete(1.0,END)
         jadwal_text.insert(END, data_jadwal.to_string(index=False))
-    else:
-        messagebox.showinfo("Warning!","Tidak ada jadwal kuliah yang dapat dihapus!")
 
 
 def parent_selection(population):
@@ -71,8 +71,8 @@ def genetic_algorithm(sum_generation, trace=False):
             child_mutate = mutasi(child)
             new_population.extend(child_mutate)
             if trace:
-                print(f"Generasi {generasi+1} - Crossover: \n Parent (0) {parent[0]} & Parent(1) {parent[1]} \n")
-                print(f"Generasi {generasi+1} - Mutasi: \n Child mutate {child_mutate}\n")
+                print(f"\nGenerasi {generasi+1} - Crossover:  \n\nParent (0)\n\n {parent[0]} & \n\n Parent(1)\n\n {parent[1]} \n")
+                print(f"\nGenerasi {generasi+1} - Mutasi:  Child mutate\n\n {child_mutate}\n")
         population = new_population
 
     population.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
@@ -81,29 +81,30 @@ def genetic_algorithm(sum_generation, trace=False):
 
 def optimasi_jadwal():
     sum_generation = int(generations_entry.get())
-    if len(jadwal_kuliah) >= 2:
+    if len(jadwal_kuliah) < 2:
+        messagebox.showinfo("Warning", "Minimal terdapat 2 jadwal kuliah untuk optimasi Jadwal!!!")
+
+    else:
         jadwal_terbaik = genetic_algorithm(sum_generation, trace=True)
         tampilkan_jadwal_gui(jadwal_terbaik)
-    else:
-        messagebox.showinfo("Peringatan", "Minimal harus ada 2 jadwal kuliah untuk melakukan optimasi.")
 
 
-def evaluasi_fitness(individu):
-    fitness = 0
-    for i in range(len(individu)):
-        for j in range(i + 1, len(individu)):
-            if (individu[i][0] <= individu[j][0] < individu[i][1] or \
-                individu[j][0] <= individu[i][0] < individu[j][1]) and \
-                    individu[i][6] == individu[j][6]:
-                fitness -= 1
-    return fitness
+def evaluasi_fitness(kromosom):
+    fitness_point = 0
+    for i in range(len(kromosom)):
+        for j in range(i + 1, len(kromosom)):
+            if (kromosom[i][0] <= kromosom[j][0] < kromosom[i][1] or \
+                kromosom[j][0] <= kromosom[i][0] < kromosom[j][1]) and \
+                    kromosom[i][6] == kromosom[j][6]:
+                fitness_point -= 1
+    return fitness_point
 
 
-def inisialisasi_populasi(jumlah_individu):
+def inisialisasi_populasi(jumlah_kromosom):
     population = []
-    for _ in range(jumlah_individu):
-        individu = random.sample(jadwal_kuliah, len(jadwal_kuliah))
-        population.append(individu)
+    for _ in range(jumlah_kromosom):
+        kromosom = random.sample(jadwal_kuliah, len(jadwal_kuliah))
+        population.append(kromosom)
     return population
 
 
