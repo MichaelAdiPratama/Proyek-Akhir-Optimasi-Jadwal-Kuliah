@@ -1,14 +1,14 @@
-# import library
+
 import random
 import pandas as pd
 from tkinter import *
 from tkinter import messagebox
 import datetime as dt
 
-# Inisiasi array Jadwal Kuliah
+
 jadwal_kuliah = []
 
-# fungsi add jadwal kuliah untuk menambahkan jadwal kuliah:
+
 def tambah_jadwal():
     start_time = int(start_time_entry.get())
     end_time = int(end_time_entry.get())
@@ -22,7 +22,7 @@ def tambah_jadwal():
     jadwal_text.delete(1.0,END)
     jadwal_text.insert(END,data_jadwal.to_string(index=False))
 
-# fungsi hapus jadwal kuliah terakhir:
+
 def hapus_jadwal():
     if jadwal_kuliah:
         jadwal_kuliah.pop()
@@ -43,7 +43,7 @@ def parent_selection(population):
     return parent
 
 
-# Rekombinasi orang tua menggunakan metode satu titik potong
+
 def rekombinasi(parent):
     crossover_point = random.randint(1, len(jadwal_kuliah) - 1)
     child = []
@@ -60,7 +60,7 @@ def mutasi(child):
             child[i][gen1], child[i][gen2] = child[i][gen2], child[i][gen1]
     return child
 
-# Algoritma genetika
+
 def genetic_algorithm(sum_generation, trace=False):
     population = inisialisasi_populasi(10)
     for generasi in range(sum_generation):
@@ -71,15 +71,14 @@ def genetic_algorithm(sum_generation, trace=False):
             child_mutate = mutasi(child)
             new_population.extend(child_mutate)
             if trace:
-                print(f"Generasi {generasi+1} - Crossover: {parent[0]} & {parent[1]}")
-                print(f"Generasi {generasi+1} - Mutasi: {child_mutate}")
+                print(f"Generasi {generasi+1} - Crossover: \n Parent (0) {parent[0]} & Parent(1) {parent[1]} \n")
+                print(f"Generasi {generasi+1} - Mutasi: \n Child mutate {child_mutate}\n")
         population = new_population
 
     population.sort(key=lambda x: evaluasi_fitness(x), reverse=True)
     return population[0]
 
 
-# Fungsi untuk menjalankan optimasi jadwal dengan metode Genetic Algorithm
 def optimasi_jadwal():
     sum_generation = int(generations_entry.get())
     if len(jadwal_kuliah) >= 2:
@@ -88,7 +87,7 @@ def optimasi_jadwal():
     else:
         messagebox.showinfo("Peringatan", "Minimal harus ada 2 jadwal kuliah untuk melakukan optimasi.")
 
-# Evaluasi fitness
+
 def evaluasi_fitness(individu):
     fitness = 0
     for i in range(len(individu)):
@@ -99,7 +98,7 @@ def evaluasi_fitness(individu):
                 fitness -= 1
     return fitness
 
-# Inisialisasi populasi awal
+
 def inisialisasi_populasi(jumlah_individu):
     population = []
     for _ in range(jumlah_individu):
@@ -107,12 +106,12 @@ def inisialisasi_populasi(jumlah_individu):
         population.append(individu)
     return population
 
-# Fungsi untuk menampilkan jadwal kuliah
+
 def tampilkan_jadwal(schedule):
     data_jadwal = pd.DataFrame(schedule, columns=["Hari", "Mata Kuliah","Nama Dosen", "Jam Mulai", "Jam Selesai", "Ruangan", "SKS"])
     return data_jadwal.to_string(index=False)
 
-# Fungsi untuk menampilkan jadwal kuliah berdasarkan nama hari
+
 def tampilkan_jadwal_per_hari(schedule):
     schedule_every_day = {}
     for schedule_item in schedule:
@@ -122,7 +121,7 @@ def tampilkan_jadwal_per_hari(schedule):
         schedule_every_day[day].append(schedule_item)
     return schedule_every_day
 
-# Fungsi untuk menampilkan jadwal kuliah ke dalam GUI
+
 def tampilkan_jadwal_gui(schedule):
     schedule_every_day = tampilkan_jadwal_per_hari(schedule)
     jadwal_text.delete(1.0, END)
@@ -133,7 +132,7 @@ def tampilkan_jadwal_gui(schedule):
         jadwal_text.insert(END, "\n\n")
 
 
-# Membuat GUI
+
 root = Tk()
 root.title("Optimasi Jadwal Kuliah")
 root.geometry("600x500")
@@ -141,13 +140,13 @@ root.geometry("600x500")
 input_frame = Frame(root)
 input_frame.pack(pady=10)
 
-# Mengatur warna latar belakang dan tampilan tombol
+
 root.configure(bg="#F0F0F0")
 tambah_button_color = "#008080"
 hapus_button_color = "#FF4500"
 generate_button_color = "#006400"
 
-# Mengatur warna latar belakang dan tampilan label dan kotak teks
+
 label_bg_color = "#F0F0F0"
 label_fg_color = "#000000"
 text_bg_color = "#FFFFFF"
@@ -193,7 +192,7 @@ hari_label = Label(input_frame, text="Hari:")
 hari_label.grid(row=3, column=0)
 
 hari_var = StringVar(root)
-hari_var.set("Senin")  # Default hari: Senin
+hari_var.set("Senin")  
 
 hari_option_menu = OptionMenu(input_frame, hari_var, "Senin", "Selasa", "Rabu", "Kamis", "Jumat", "Sabtu")
 hari_option_menu.grid(row=3, column=1)
